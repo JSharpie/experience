@@ -135,11 +135,19 @@ function update() {
     game.paused = true;
     // menu = game.add.sprite(game.camera.x + 400, game.camera.y +300, 'menu');
     //     menu.anchor.setTo(0.5, 0.5);
-        choiseLabel = game.add.text(game.camera.x + 460, game.camera.y + 230, 'Paused', { font: '100px Arial', fill: '#000000' });
+        // choiseLabel = game.add.text(game.camera.x + 460, game.camera.y + 230, 'Paused', { font: '100px Arial', fill: '#000000' });
     //     choiseLabel.anchor.setTo(0.5, 0.5);
-    // rollIcon = game.add.sprite(game.camera.x + 200, game.camera.y + 100, 'rollIcon');
+    rollIcon = game.add.sprite(game.camera.x + 200, game.camera.y + 100, 'rollIcon');
   }
   move();
+  if(bulletKinesis === true){
+    game.physics.arcade.moveToPointer(bullet, 750, game.input.activePointer, 400);
+    bullet.rotation = game.physics.arcade.angleToPointer(bullet);
+    ammoText.text = 'Ammo: ' + player.ammo;
+    if(wasd.z.isUp){
+      bulletKinesis = false;
+    }
+  }
   if (game.input.keyboard.isDown(Phaser.KeyCode.ONE)) {
     weapon.kill();
     addWeapon('gun', 'gun');
@@ -155,18 +163,19 @@ function update() {
   }
   activateShield();
 
-  if (swung === true && swordEquipped) {
+  if (swung === true && swordEquipped || laserSwordEquipped) {
     weapon.angle = weapon.angle + 90;
   }
   if (swingTimer.seconds > 0.1) {
     slash.kill();
     swingTimer.stop();
   }
-  if(rollDelay.seconds < 0.5 && rollDelay.running === true){
+  if(rollDelay.seconds < 0.5 && rollDelay.running === true && player.stamina >= 25){
     roll();
   }
-  if(rollDelay.seconds > 0.5){
+  if(rollDelay.seconds > 0.5 && player.stamina >= 25){
     rollDelay.stop();
+    player.stamina -= 25
     player.angle = 0;
   }
   restoreMana();

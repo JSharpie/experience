@@ -5,7 +5,6 @@ var nextSlash = 0;
 var slash;
 var bullet;
 var ranOnce = true;
-
 function gunFire() {
   if (!game.paused && !shieldEquipped) {
     if (game.time.now > nextFire && bullets.countDead() > 0 && player.ammo > 0) {
@@ -19,6 +18,11 @@ function gunFire() {
       game.physics.arcade.moveToPointer(bullet, 750, game.input.activePointer);
       player.ammo--;
       ammoText.text = 'Ammo: ' + player.ammo;
+      if(wasd.z.isDown){
+        player.mana -= 25;
+        bulletKinesis = true;
+        bullet.anchor.setTo(0.5, 0.5);
+      }
     } else {
       gunClick.play();
       return;
@@ -48,29 +52,27 @@ function addWeapon(wpn, type) {
   if (type === 'sword') {
     drawSword.play();
     swordEquipped = true;
-    laserSwordEquipped = false;
     gunEquipped = false;
   }
   if (type === 'laserSword') {
     laserSwordOn.play();
-    laserSwordEquipped = true;
-    swordEquipped = false;
+    swordEquipped = true;
     gunEquipped = false;
   }
   if (type === 'gun') {
     drawGun.play();
     gunEquipped = true;
     swordEquipped = false;
-    laserSwordEquipped = false;
   }
 
   weapon = game.add.sprite(player.body.x, player.body.y, wpn);
-  if (wpn === "shield") {
 
-  }
   weapon.enableBody = true;
   game.physics.arcade.enable(weapon);
   weapon.scale.setTo(0.5, 0.5);
+  if (type === "laserSword") {
+    weapon.scale.setTo(0.75, 0.75);
+  }
   weapon.anchor.setTo(0.05, 0.45);
   // game.physics.arcade.enable(weapon);
 }
@@ -104,11 +106,6 @@ function attack() {
   }
   if (swordEquipped && attackTimer.seconds > 0.3) {
     swordSlash.play();
-    swordSwing();
-    attackTimer.stop();
-  }
-  if (laserSwordEquipped && attackTimer.seconds > 0.5) {
-    laserSwordSlash.play();
     swordSwing();
     attackTimer.stop();
   }
@@ -257,19 +254,20 @@ function unpause(event) {
   // Only act if paused
   if (game.paused) {
     // Calculate the corners of the menu
-    // var x1 = rollIcon.x - game.camera.x,
-    //   x2 = rollIcon.x - game.camera.x + 128,
-    //   y1 = rollIcon.y - game.camera.y,
-    //   y2 = rollIcon.y - game.camera.y + 128;
-    var x1 = choiseLabel.x - game.camera.x,
-      x2 = choiseLabel.x - game.camera.x + 128,
-      y1 = choiseLabel.y - game.camera.y,
-      y2 = choiseLabel.y - game.camera.y + 128;
+    var x1 = rollIcon.x - game.camera.x,
+      x2 = rollIcon.x - game.camera.x + 128,
+      y1 = rollIcon.y - game.camera.y,
+      y2 = rollIcon.y - game.camera.y + 128;
+    // var x1 = choiseLabel.x - game.camera.x,
+    //   x2 = choiseLabel.x - game.camera.x + 128,
+    //   y1 = choiseLabel.y - game.camera.y,
+    //   y2 = choiseLabel.y - game.camera.y + 128;
     if (event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2) {
-      console.log('roll clicked');
+      // console.log('roll clicked');
+      player.skillPoints -= 1;
     } else {
-      // rollIcon.destroy();
-      choiseLabel.destroy();
+      rollIcon.destroy();
+      // choiseLabel.destroy();
       // Unpause the game
       game.paused = false;
     }

@@ -54,7 +54,7 @@ var laserSwordOn;
 var laserSwordOff;
 var fireballSound;
 var grubCollide;
-
+var bulletKinesis = false;
 
 
 
@@ -68,7 +68,8 @@ function create() {
     e: game.input.keyboard.addKey(Phaser.Keyboard.E),
     p: game.input.keyboard.addKey(Phaser.Keyboard.P),
     q: game.input.keyboard.addKey(Phaser.Keyboard.Q),
-    f: game.input.keyboard.addKey(Phaser.Keyboard.F)
+    f: game.input.keyboard.addKey(Phaser.Keyboard.F),
+    z: game.input.keyboard.addKey(Phaser.Keyboard.Z)
   };
   console.log(stats);
   // game.stage.backgroundColor = '#787878';
@@ -86,7 +87,6 @@ function create() {
 
   layer = firstMap.createLayer('LevelOne');
   layer.resizeWorld();
-
 
 
 
@@ -175,6 +175,7 @@ function create() {
   player.health = 10 + stats.endurance;
   player.stamina = 100 + Math.floor(stats.endurance/5);
   player.mana = 100 + (stats.wisdom/2);
+  player.skillPoints = 3;
   addWeapon('gun');
   addShield();
   game.camera.follow(player);
