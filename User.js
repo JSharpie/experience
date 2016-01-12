@@ -8,10 +8,13 @@ var userSchema = new mongoose.Schema({
     endurance: {type: Number},
     dexterity: {type: Number},
     intelligence: {type: Number},
-    wisdom: {type: Number}
+    wisdom: {type: Number},
+    experience: {type: Number},
   },
   currGoals: {type: Array},
-  completedGoals: {type: Array}
+  completedGoals: {type: Array},
+  skills: {type: Array},
+  items: {type: Array}
 });
 
 var User = mongoose.model("User", userSchema);

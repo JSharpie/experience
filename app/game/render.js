@@ -8,5 +8,5 @@ function render(){
   //   game.debug.body(fireball);
   // }
 
-  // game.debug.body(layer);
+  // layer.debug = true;
 }

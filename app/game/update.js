@@ -24,6 +24,9 @@ function update() {
   }
   weapon.x = player.body.x + 32;
   weapon.y = player.body.y + 32;
+  if(weapon.key === "assaultrifle"){
+    weapon.y = player.body.y + 36;
+  }
   shield.x = player.body.x + 32;
   shield.y = player.body.y + 32;
   if(wasd.q.isUp){
@@ -34,6 +37,12 @@ function update() {
   }
   if(shield.visible === true){
     shieldEquipped = true;
+  }
+  if(weapon.key === "gun"){
+    fireRate = 100;
+  }
+  if(weapon.key === "assaultrifle"){
+    fireRate = 150;
   }
   weapon.visible = true;
   shield.body.enable = false;
@@ -50,27 +59,36 @@ function update() {
       fireTimer.stop();
     }
   }
+  if(weapon.key === "assaultrifle" && game.input.mousePointer.isDown){
+    gunFire();
+  }
   game.physics.arcade.overlap(enemyBullets, player, bulletHitPlayer, null, this);
   game.physics.arcade.overlap(enemyArrows, player, bulletHitPlayer, null, this);
   if (swordEquipped) {
     weapon.anchor.setTo(0, 1);
     weapon.y = player.body.y + 40;
   }
-  if (laserSwordEquipped) {
-    weapon.anchor.setTo(0, 1);
-    weapon.y = player.body.y + 40;
+  if(weapon.key === "assaultrifle"){
+    weapon.anchor.setTo(0.25, 0.5);
   }
   weapon.rotation = game.physics.arcade.angleToPointer(weapon);
   if (game.input.mousePointer.x < player.x - game.camera.x) {
     player.scale.x = -1;
-    if (gunEquipped) {
+    weapon.x = player.body.x + 32;
+    if (weapon.key === "gun") {
       weapon.scale.y = -0.5;
     }
-    weapon.x = player.body.x + 32;
+    if(weapon.key === "assaultrifle"){
+      weapon.scale.y = -0.75;
+    }
+
   } else {
     player.scale.x = 1;
-    if (gunEquipped) {
+    if (weapon.key === "gun") {
       weapon.scale.y = 0.5;
+    }
+    if(weapon.key === "assaultrifle"){
+      weapon.scale.y = 0.75;
     }
   }
   if(player.health <= 0){
@@ -161,16 +179,20 @@ function update() {
     weapon.kill();
     addWeapon('laserSword', 'laserSword');
   }
+  if(game.input.keyboard.isDown(Phaser.KeyCode.FOUR)) {
+    weapon.kill();
+    addWeapon('assaultrifle', 'gun');
+  }
   activateShield();
 
-  if (swung === true && swordEquipped || laserSwordEquipped) {
+  if (swung === true && swordEquipped) {
     weapon.angle = weapon.angle + 90;
   }
   if (swingTimer.seconds > 0.1) {
     slash.kill();
     swingTimer.stop();
   }
-  if(rollDelay.seconds < 0.5 && rollDelay.running === true && player.stamina >= 25){
+  if(rollDelay.seconds < 0.5 && rollDelay.running === true && player.stamina >= 25 && player.hasRoll){
     roll();
   }
   if(rollDelay.seconds > 0.5 && player.stamina >= 25){

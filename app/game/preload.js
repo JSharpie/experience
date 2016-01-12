@@ -28,6 +28,7 @@ var preload = function() {
   game.load.image('bullet', 'game/assets/bullet.png');
   game.load.image('arrow', 'game/assets/arrow.png');
   game.load.image('crossbow', 'game/assets/crossbow.png');
+  game.load.image('assaultrifle', 'game/assets/assaultrifle.png');
   game.load.spritesheet('shield', 'game/assets/shield_fix.png', 128, 128);
   game.load.image('menu', 'game/assets/number-buttons-90x90.png', 270, 180);
   game.load.image('yetisplash', 'game/assets/yetipixal.png');

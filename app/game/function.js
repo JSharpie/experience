@@ -1,10 +1,3 @@
-var fireRate = 100;
-var nextFire = 0;
-var swingRate = 100;
-var nextSlash = 0;
-var slash;
-var bullet;
-var ranOnce = true;
 function gunFire() {
   if (!game.paused && !shieldEquipped) {
     if (game.time.now > nextFire && bullets.countDead() > 0 && player.ammo > 0) {
@@ -73,8 +66,10 @@ function addWeapon(wpn, type) {
   if (type === "laserSword") {
     weapon.scale.setTo(0.75, 0.75);
   }
+  if(weapon.key === "assaultrifle"){
+    weapon.scale.setTo(0.75, 0.75);
+  }
   weapon.anchor.setTo(0.05, 0.45);
-  // game.physics.arcade.enable(weapon);
 }
 
 function addShield() {
@@ -101,8 +96,11 @@ function collectAmmo(player, ammo) {
 
 function attack() {
   attackTimer.start();
-  if (gunEquipped) {
+  if (weapon.key === "gun") {
     gunFire();
+  }
+  if(weapon.key === "assaultrifle"){
+    return;
   }
   if (swordEquipped && attackTimer.seconds > 0.3) {
     swordSlash.play();
@@ -265,6 +263,7 @@ function unpause(event) {
     if (event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2) {
       // console.log('roll clicked');
       player.skillPoints -= 1;
+      player.hasRoll = true;
     } else {
       rollIcon.destroy();
       // choiseLabel.destroy();
